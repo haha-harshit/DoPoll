@@ -5,4 +5,6 @@ const pollController = require("../controllers/poll");
 
 router.get("/", pollController.poll);
 
+router.post("/", pollController.doPoll);
+
 module.exports = router;
