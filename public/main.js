@@ -2,9 +2,6 @@ const form = document.getElementById("vote-form");
 
 form.addEventListener("submit", (e) => {
     const choice = document.querySelector("input[name=startup]:checked").value;
-    if (choice == null) {
-        console.log("cool");
-    }
     const data = { startup: choice };
 
     fetch("http://localhost:8000/poll", {
