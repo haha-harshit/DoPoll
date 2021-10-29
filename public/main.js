@@ -2,6 +2,9 @@ const form = document.getElementById("vote-form");
 
 form.addEventListener("submit", (e) => {
     const choice = document.querySelector("input[name=startup]:checked").value;
+    if (choice == null) {
+        console.log("cool");
+    }
     const data = { startup: choice };
 
     fetch("http://localhost:8000/poll", {
@@ -20,10 +23,10 @@ form.addEventListener("submit", (e) => {
 
 // for chart
 let dataPoints = [
-    { label: "cars24", y: 0 },
-    { label: "unacademy", y: 0 },
-    { label: "zerodha", y: 0 },
-    { label: "razorpay", y: 0 },
+    { label: "Cars24", y: 0 },
+    { label: "Unacademy", y: 0 },
+    { label: "Zerodha", y: 0 },
+    { label: "Razorpay", y: 0 },
 ];
 
 const chartContainer = document.querySelector("#chartContainer");
@@ -44,4 +47,24 @@ if (chartContainer) {
     });
 
     chart.render();
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher("86b31112d6e31ea5f9ff", {
+        cluster: "ap2",
+    });
+
+    var channel = pusher.subscribe("startup-poll");
+    channel.bind("startup-vote", function (data) {
+        dataPoints = dataPoints.map((x) => {
+            if (x.label == data.startup) {
+                x.y += data.points;
+                return x;
+            } else {
+                return x;
+            }
+        });
+        chart.render();
+    });
 }

@@ -1,3 +1,4 @@
+const json = require("body-parser/lib/types/json");
 const Pusher = require("pusher");
 
 const pusher = new Pusher({
@@ -12,11 +13,16 @@ module.exports.poll = (req, res) => {
     return res.send("<h1>This is poll page</h1>");
 };
 
+// const about = "startup";
+
 module.exports.doPoll = (req, res) => {
-    pusher.trigger("os-poll", "os-vote", {
-        poitns: 1,
-        os: req.body.os,
+    pusher.trigger("startup-poll", "startup-vote", {
+        points: 1,
+        startup: req.body.startup,
     });
 
-    return res.json({ success: true, message: "Voted successfully!" });
+    return res.json({
+        success: true,
+        message: `Voted successfully for ${req.body.startup}`,
+    });
 };
